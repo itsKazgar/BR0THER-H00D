@@ -2,7 +2,6 @@
 
 A 7-agent AI trading system for Solana memecoins.
 
-🔴 [Live Demo](https://itskazgar.github.io/BR0THER-H00D) — trading console preview
 Scans, scores, reasons, and trades — paper or live.
 
 ## Quick Start (30 seconds)
