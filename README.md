@@ -1,11 +1,13 @@
 # BR0THER-H00D — Solana Alpha Collective
 
 A 7-agent AI trading system for Solana memecoins.
+
+🔴 [Live Demo](https://itskazgar.github.io/BR0THER-H00D) — trading console preview
 Scans, scores, reasons, and trades — paper or live.
 
 ## Quick Start (30 seconds)
 
-    git clone https://github.com/yourname/BR0THER-H00D
+    git clone https://github.com/itsKazgar/BR0THER-H00D
     cd BR0THER-H00D
     bash install.sh
     python start.py
