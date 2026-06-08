@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BR0THER-H00D · TEAM v4</title>
+<style>
+:root{--bg:#080b0f;--bg2:#0d1117;--bg3:#111820;--border:#1d2940;--border2:#243050;--green:#00ff88;--red:#ff3b5c;--yellow:#ffd60a;--blue:#38bdf8;--purple:#c084fc;--dim:#3a4a60;--muted:#5a7090;--text:#94a3b8;--bright:#e2e8f0;--white:#f0f4ff;--font:'Ubuntu Mono','Fira Code',monospace;--scan:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,0.015) 2px,rgba(0,255,136,0.015) 4px)}
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:12px}
+body::before{content:'';position:fixed;inset:0;background:var(--scan);pointer-events:none;z-index:9999;opacity:0.4}
+#app{display:grid;grid-template-rows:42px 1fr 280px;height:100vh}
+#hdr{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0;position:relative;overflow:hidden}
+#hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);opacity:0.5}
+.hdr-logo{padding:0 20px;font-size:14px;font-weight:bold;color:var(--green);letter-spacing:3px;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.hdr-logo .blink{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 6px var(--green)}50%{opacity:0.3;box-shadow:none}}
+.hdr-pills{display:flex;align-items:center;height:100%;flex:1;padding:0 12px}
+.hdr-pill{padding:0 14px;height:100%;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);border-right:1px solid var(--border);cursor:pointer;transition:background 0.15s,color 0.15s;white-space:nowrap}
+.hdr-pill:hover{background:var(--bg3);color:var(--text)}
+.hdr-pill .pill-val{color:var(--bright);font-size:12px}
+.hdr-pill .pill-val.green{color:var(--green)}.hdr-pill .pill-val.red{color:var(--red)}.hdr-pill .pill-val.yellow{color:var(--yellow)}.hdr-pill .pill-val.blue{color:var(--blue)}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:12px;padding:0 16px;font-size:11px;color:var(--muted)}
+#conn-dot{width:8px;height:8px;border-radius:50%;background:var(--dim);transition:all 0.3s}
+#conn-dot.ok{background:var(--green);box-shadow:0 0 8px var(--green)}
+#main{display:grid;grid-template-columns:240px 1fr 300px;overflow:hidden}
+.panel{border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.panel:last-child{border-right:none}
+.panel-hdr{background:var(--bg2);border-bottom:1px solid var(--border);padding:7px 12px;font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+.panel-hdr .phc{color:var(--blue)}
+.scroll{overflow-y:auto;flex:1}.scroll::-webkit-scrollbar{width:3px}.scroll::-webkit-scrollbar-thumb{background:var(--border2)}
+.agent-row{padding:9px 12px;border-bottom:1px solid var(--border);cursor:default;transition:background 0.1s}
+.agent-row:hover{background:var(--bg3)}
+.agent-row .an{color:var(--bright);font-size:12px;margin-bottom:2px}.agent-row .am{color:var(--dim);font-size:10px}
+.agent-row .ab{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
+.badge{font-size:9px;padding:1px 5px;border-radius:2px;border:1px solid var(--border2);color:var(--muted);letter-spacing:0.5px}
+.badge.online{color:var(--green);border-color:rgba(0,255,136,0.3)}.badge.offline{color:var(--dim)}
+.agent-row .as{text-align:right;font-size:11px}.agent-row .as .trust{color:var(--blue)}.agent-row .as .acc{color:var(--green)}.agent-row .as .w{color:var(--dim);font-size:10px}
+.agent-row .arow{display:grid;grid-template-columns:1fr auto}
+#mid{display:flex;flex-direction:column;overflow:hidden}
+#ctx-strip{background:var(--bg2);border-bottom:1px solid var(--border);padding:6px 14px;font-size:11px;color:var(--muted);flex-shrink:0;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+#ctx-strip b{color:var(--bright)}
+#ctx-strip .new-launch{background:rgba(255,214,10,0.1);border:1px solid rgba(255,214,10,0.3);color:var(--yellow);padding:1px 7px;border-radius:2px;font-size:10px}
+#cons-bar{background:var(--bg3);border-bottom:1px solid var(--border);padding:8px 14px;flex-shrink:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#cons-bar .cb-sym{color:var(--white);font-size:13px;font-weight:bold;min-width:100px}
+#cons-bar .cb-price{color:var(--muted);font-size:11px}
+.bar-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;display:flex;min-width:80px}
+.bar-buy{background:var(--green);height:100%;transition:width 0.5s}.bar-sell{background:var(--red);height:100%;transition:width 0.5s}.bar-hold{background:var(--muted);height:100%;transition:width 0.5s}
+.bar-label{font-size:10px}.bar-label.g{color:var(--green)}.bar-label.r{color:var(--red)}.bar-label.d{color:var(--muted)}
+.verdict-tag{padding:2px 10px;border-radius:3px;font-size:11px;font-weight:bold;letter-spacing:1px}
+.verdict-tag.BUY{background:rgba(0,255,136,0.15);color:var(--green);border:1px solid rgba(0,255,136,0.3)}
+.verdict-tag.SELL{background:rgba(255,59,92,0.15);color:var(--red);border:1px solid rgba(255,59,92,0.3)}
+.verdict-tag.HOLD{background:rgba(90,112,144,0.15);color:var(--muted);border:1px solid rgba(90,112,144,0.3)}
+.verdict-tag.VETO{background:rgba(255,59,92,0.15);color:var(--red);border:1px solid rgba(255,59,92,0.3)}
+#vote-feed{flex:1;overflow:hidden;display:flex;flex-direction:column;border-bottom:1px solid var(--border)}
+.col-hdr{padding:5px 14px;background:var(--bg2);border-bottom:1px solid var(--border);font-size:10px;color:var(--dim);letter-spacing:1px;flex-shrink:0;display:grid;gap:8px}
+.col-hdr.v{grid-template-columns:110px 48px 52px 1fr auto}.col-hdr.p{grid-template-columns:65px 80px 80px 80px 80px 1fr}
+.vote-row{padding:6px 14px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:110px 48px 52px 1fr auto;gap:8px;align-items:center;animation:slidein 0.2s ease}
+@keyframes slidein{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:none}}
+.vn{color:var(--text);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.va{font-size:11px;font-weight:bold;text-align:center;letter-spacing:0.5px}
+.va.BUY{color:var(--green)}.va.SELL{color:var(--red)}.va.HOLD{color:var(--muted)}
+.vc{font-size:11px;color:var(--blue)}.vr{color:var(--muted);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vl{color:var(--dim);font-size:10px;text-align:right}
+#pos-area{flex-shrink:0;max-height:180px;display:flex;flex-direction:column}
+.pos-row{padding:5px 14px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:65px 80px 80px 80px 80px 1fr;gap:8px;align-items:center;font-size:11px;transition:background 0.1s}
+.pos-row:hover{background:var(--bg3)}.ps{color:var(--bright);font-size:12px}.pe{color:var(--muted)}.psz{color:var(--text)}.pst{color:var(--red)}.ppnl.pos{color:var(--green)}.ppnl.neg{color:var(--red)}.pag{color:var(--dim);font-size:10px;text-align:right}
+.msg-row{padding:6px 12px;border-bottom:1px solid var(--border);animation:slidein 0.2s ease}
+.msg-row .mf{font-size:10px;letter-spacing:0.5px;margin-bottom:2px}
+.msg-row .mf.alert{color:var(--red)}.msg-row .mf.signal{color:var(--green)}.msg-row .mf.opinion{color:var(--blue)}.msg-row .mf.answer{color:var(--purple)}.msg-row .mf.broadcast{color:var(--muted)}
+.msg-row .mb{color:var(--text);font-size:11px;line-height:1.4;word-break:break-word}.msg-row .mt{color:var(--dim);font-size:10px;margin-top:2px}
+#term-section{border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;background:var(--bg)}
+#term-left{border-right:1px solid var(--border);display:flex;flex-direction:column}
+#term-right{display:flex;flex-direction:column}
+.term-hdr{background:var(--bg2);border-bottom:1px solid var(--border);padding:6px 14px;font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;flex-shrink:0;display:flex;align-items:center;gap:10px}
+.term-hdr .tdot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.term-hdr .tdot.r{background:#ff5f56}.term-hdr .tdot.y{background:#ffbd2e}.term-hdr .tdot.g{background:var(--green)}
+#term-out{flex:1;overflow-y:auto;padding:8px 14px;font-size:12px;line-height:1.6;background:var(--bg);min-height:0}
+#term-out::-webkit-scrollbar{width:3px}#term-out::-webkit-scrollbar-thumb{background:var(--border2)}
+.term-line{white-space:pre-wrap;word-break:break-all}
+.term-line.cmd{color:var(--green)}.term-line.out{color:var(--text)}.term-line.err{color:var(--red)}.term-line.info{color:var(--blue)}.term-line.warn{color:var(--yellow)}.term-line.sys{color:var(--muted);font-style:italic}
+#term-input-row{display:flex;align-items:center;background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0}
+#term-prompt{padding:0 10px;color:var(--green);font-size:12px;white-space:nowrap;font-family:var(--font);flex-shrink:0}
+#term-input{flex:1;background:transparent;border:none;outline:none;color:var(--white);font-family:var(--font);font-size:12px;padding:8px 4px;caret-color:var(--green)}
+#term-run-btn{background:rgba(0,255,136,0.1);border:none;border-left:1px solid var(--border);color:var(--green);padding:8px 14px;cursor:pointer;font-family:var(--font);font-size:11px;letter-spacing:1px;transition:background 0.15s;flex-shrink:0}
+#term-run-btn:hover{background:rgba(0,255,136,0.2)}#term-run-btn:active{background:rgba(0,255,136,0.3)}#term-run-btn.running{color:var(--yellow)}
+#quick-cmds{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#qcmd-list{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:3px}
+#qcmd-list::-webkit-scrollbar{width:3px}#qcmd-list::-webkit-scrollbar-thumb{background:var(--border2)}
+.qcmd-section{color:var(--dim);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:6px 4px 3px}
+.qcmd-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:3px;cursor:pointer;font-family:var(--font);font-size:11px;text-align:left;transition:all 0.15s;display:flex;align-items:center;gap:8px}
+.qcmd-btn:hover{background:var(--border);color:var(--bright);border-color:var(--border2)}
+.qcmd-btn .qi{color:var(--blue);font-size:10px;flex-shrink:0}.qcmd-btn .ql{color:var(--muted);font-size:10px;margin-left:auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px}
+.no-data{color:var(--dim);padding:14px;font-size:11px;font-style:italic}
+#pnl-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:5px 14px;font-size:11px;color:var(--muted);flex-shrink:0;display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+#pnl-bar b{color:var(--bright)}#pnl-bar .green b{color:var(--green)}#pnl-bar .red b{color:var(--red)}#pnl-bar .yellow b{color:var(--yellow)}#pnl-bar .blue b{color:var(--blue)}
+#err-banner{display:none;background:rgba(255,59,92,0.1);border-bottom:1px solid rgba(255,59,92,0.3);padding:5px 14px;font-size:11px;color:var(--red)}
+</style></head><body>
+<div id="app">
+<div id="hdr">
+<div class="hdr-logo"><div class="blink"></div>BR0THER-H00D</div>
+<div class="hdr-pills">
+<div class="hdr-pill">MODE <span class="pill-val" id="hpill-mode">DRY</span></div>
+<div class="hdr-pill">SESSION PNL <span class="pill-val green" id="hpill-pnl">+0.000</span> SOL</div>
+<div class="hdr-pill">DAILY LOSS <span class="pill-val" id="hpill-loss">0.000</span> SOL</div>
+<div class="hdr-pill">POSITIONS <span class="pill-val blue" id="hpill-pos">0</span></div>
+<div class="hdr-pill">WIN RATE <span class="pill-val" id="hpill-wr">-</span></div>
+<div class="hdr-pill">AGENTS <span class="pill-val blue" id="hpill-ag">0</span></div>
+</div>
+<div class="hdr-right"><span id="last-ts" style="color:var(--dim);font-size:10px"></span><div id="conn-dot"></div></div>
+</div>
+<div id="err-banner"></div>
+<div id="main">
+<div class="panel">
+<div class="panel-hdr">Collective <span class="phc" id="ag-count-h">0</span></div>
+<div class="scroll" id="agents-list"><div class="no-data">Loading agents...</div></div>
+</div>
+<div id="mid" class="panel">
+<div id="ctx-strip"><span>No active context</span></div>
+<div id="cons-bar">
+<span class="cb-sym" id="cb-sym">-</span>
+<span class="cb-price" id="cb-price"></span>
+<div class="bar-track">
+<div class="bar-buy" id="bar-buy" style="width:0%"></div>
+<div class="bar-sell" id="bar-sell" style="width:0%"></div>
+<div class="bar-hold" id="bar-hold" style="width:0%"></div>
+</div>
+<span class="bar-label g" id="bar-b-pct">0% B</span>
+<span class="bar-label r" id="bar-s-pct">0% S</span>
+<span class="bar-label d" id="bar-h-pct">0% H</span>
+<span class="verdict-tag" id="verdict-tag" style="display:none"></span>
+<span id="veto-txt" style="color:var(--red);font-size:11px;display:none"></span>
+</div>
+<div id="pnl-bar">
+<span>quorum <b id="s-qrm">-</b></span>
+<span>conf <b id="s-conf">-</b></span>
+<span class="green">session <b id="s-sess">0.000 SOL</b></span>
+<span class="red">daily_loss <b id="s-dloss">0.000 SOL</b></span>
+<span class="blue">exposure <b id="s-exp">0.000 SOL</b></span>
+<span class="yellow">trades <b id="s-trades">0</b></span>
+</div>
+<div id="vote-feed">
+<div class="col-hdr v"><span>AGENT</span><span>ACTION</span><span>CONF</span><span>REASONING</span><span>MS</span></div>
+<div class="scroll" id="votes-list"><div class="no-data">Waiting for votes...</div></div>
+</div>
+<div id="pos-area">
+<div class="panel-hdr">Positions <span class="phc" id="pos-count-h">0</span></div>
+<div class="col-hdr p"><span>SYM</span><span>ENTRY</span><span>SIZE</span><span>STOP</span><span>PNL</span><span>AGE</span></div>
+<div class="scroll" id="pos-list"><div class="no-data">No open positions</div></div>
+</div>
+</div>
+<div class="panel">
+<div class="panel-hdr">Message Bus <span class="phc" id="msg-count-h">0</span></div>
+<div class="scroll" id="msgs-list"><div class="no-data">No messages</div></div>
+</div>
+</div>
+<div id="term-section">
+<div id="term-left">
+<div class="term-hdr"><span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>&nbsp;&nbsp;TERMINAL - proxied to /api/exec</div>
+<div id="term-out">
+<div class="term-line sys">-- BR0THER-H00D Terminal Ready --</div>
+<div class="term-line sys">Commands run on the server via POST /api/exec</div>
+</div>
+<div id="term-input-row">
+<span id="term-prompt">team@v4 $&nbsp;</span>
+<input id="term-input" type="text" placeholder="python3 team.py status" autocomplete="off" spellcheck="false">
+<button id="term-run-btn" onclick="runCmd()">RUN</button>
+</div>
+</div>
+<div id="term-right">
+<div class="term-hdr" style="border-bottom:1px solid var(--border)">QUICK COMMANDS</div>
+<div id="quick-cmds"><div id="qcmd-list">
+<div class="qcmd-section">TRADING</div>
+<button class="qcmd-btn" onclick="setCmd('python3 supervisor.py --mock')"><span class="qi">></span> Start Mock Trading<span class="ql">supervisor --mock</span></button>
+<button class="qcmd-btn" onclick="setCmd('python3 supervisor.py')"><span class="qi" style="color:var(--red)">!</span> Start LIVE<span class="ql">DRY_RUN=false required</span></button>
+<button class="qcmd-btn" onclick="runImmediate('python3 team.py run --mock')"><span class="qi">~</span> Quick Mock Run<span class="ql">one-shot</span></button>
+<div class="qcmd-section">STATUS</div>
+<button class="qcmd-btn" onclick="runImmediate('python3 team.py status')"><span class="qi">></span> System Status<span class="ql">team.py status</span></button>
+<button class="qcmd-btn" onclick="runImmediate('python3 team.py agents')"><span class="qi">></span> Agent List + Trust<span class="ql">team.py agents</span></button>
+<button class="qcmd-btn" onclick="runImmediate('python3 team.py positions')"><span class="qi">></span> Open Positions<span class="ql">team.py positions</span></button>
+<button class="qcmd-btn" onclick="runImmediate('python3 team.py bus')"><span class="qi">></span> Message Bus<span class="ql">team.py bus</span></button>
+<div class="qcmd-section">ANALYSIS</div>
+<button class="qcmd-btn" onclick="promptAddr('python3 team.py analyze')"><span class="qi">></span> Analyze Token<span class="ql">paste address</span></button>
+<button class="qcmd-btn" onclick="runImmediate('cat data/trade_history.json 2>/dev/null | python3 -m json.tool | tail -80')"><span class="qi">></span> Trade History<span class="ql">last trades</span></button>
+<button class="qcmd-btn" onclick="runImmediate('cat data/positions.json 2>/dev/null | python3 -m json.tool')"><span class="qi">></span> Raw Positions JSON<span class="ql">positions.json</span></button>
+<div class="qcmd-section">SYSTEM</div>
+<button class="qcmd-btn" onclick="runImmediate('cat data/crash_log.txt 2>/dev/null | tail -30')"><span class="qi" style="color:var(--red)">!</span> Crash Log<span class="ql">last 30 lines</span></button>
+<button class="qcmd-btn" onclick="runImmediate('ls -lah data/')"><span class="qi">></span> Data Directory<span class="ql">ls data/</span></button>
+<button class="qcmd-btn" onclick="runImmediate('pip list --format=columns | grep -E "solana|solders|aiohttp|uvicorn"')"><span class="qi">></span> Check Deps<span class="ql">pip list</span></button>
+<button class="qcmd-btn" onclick="runImmediate('python3 -c "from config import cfg; print(cfg)"')"><span class="qi">></span> Show Config<span class="ql">config.cfg</span></button>
+<button class="qcmd-btn" onclick="runImmediate('pytest tests/ -v --tb=short 2>&1 | tail -30')"><span class="qi">></span> Run Tests<span class="ql">pytest tests/</span></button>
+<button class="qcmd-btn" onclick="runImmediate('cat .env 2>/dev/null | grep -v KEY | grep -v PRIVATE | grep -v SECRET')"><span class="qi">></span> .env masked<span class="ql">no secrets</span></button>
+<div class="qcmd-section">GIT</div>
+<button class="qcmd-btn" onclick="runImmediate('git log --oneline -10')"><span class="qi">></span> Git Log<span class="ql">last 10</span></button>
+<button class="qcmd-btn" onclick="runImmediate('git status')"><span class="qi">></span> Git Status</button>
+<button class="qcmd-btn" onclick="runImmediate('git diff --stat HEAD~1')"><span class="qi">></span> Last Diff<span class="ql">vs HEAD~1</span></button>
+</div></div>
+</div>
+</div>
+</div>
+<script>
+const S={votes:[],lastCtx:{},wsActive:false,cmdHistory:[],histIdx:-1,running:false};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const pct=v=>(Number(v)*100).toFixed(0)+'%';
+const fmt=(n,d=6)=>Number(n||0).toFixed(d);
+function age(ts){const s=Math.floor(Date.now()/1000-(ts||0));if(s<60)return s+'s';if(s<3600)return Math.floor(s/60)+'m';return Math.floor(s/3600)+'h'}
+const termOut=$('term-out');
+function termLine(text,cls='out'){const d=document.createElement('div');d.className='term-line '+cls;d.textContent=text;termOut.appendChild(d);termOut.scrollTop=termOut.scrollHeight}
+function setCmd(cmd){$('term-input').value=cmd;$('term-input').focus()}
+function promptAddr(prefix){const addr=prompt('Token address:');if(addr&&addr.trim())runImmediate(prefix+' '+addr.trim())}
+async function runImmediate(cmd){setCmd(cmd);await runCmd()}
+async function runCmd(){
+  const input=$('term-input');const cmd=input.value.trim();if(!cmd||S.running)return;
+  S.cmdHistory.unshift(cmd);if(S.cmdHistory.length>50)S.cmdHistory.pop();S.histIdx=-1;
+  termLine('$ '+cmd,'cmd');input.value='';
+  const btn=$('term-run-btn');btn.textContent='...';btn.className='running';S.running=true;
+  try{
+    const res=await fetch('/api/exec',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cmd})});
+    if(res.status===404){termLine('[/api/exec not found - add to api.py]','warn');S.running=false;btn.textContent='RUN';btn.className='';return}
+    const data=await res.json();const out=(data.stdout||'').trim();const err=(data.stderr||'').trim();
+    if(out)out.split('\n').forEach(line=>{let cls='out';if(/error|exception|traceback|failed/i.test(line))cls='err';else if(/warning|warn/i.test(line))cls='warn';else if(/\[team\]|\[pos\]/i.test(line))cls='info';termLine(line,cls)});
+    if(err)err.split('\n').forEach(line=>{if(line.trim())termLine(line,'err')});
+    if(!out&&!err)termLine('[done]','sys');
+    if(data.returncode!==undefined&&data.returncode!==0)termLine('[exit '+data.returncode+']','warn');
+  }catch(e){termLine('Network error: '+e.message,'err')}
+  S.running=false;btn.textContent='RUN';btn.className='';
+}
+$('term-input').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){runCmd();return}
+  if(e.key==='ArrowUp'){e.preventDefault();if(S.histIdx<S.cmdHistory.length-1){S.histIdx++;$('term-input').value=S.cmdHistory[S.histIdx]}}
+  if(e.key==='ArrowDown'){e.preventDefault();if(S.histIdx>0){S.histIdx--;$('term-input').value=S.cmdHistory[S.histIdx]}else{S.histIdx=-1;$('term-input').value=''}}
+  if(e.key==='l'&&e.ctrlKey){e.preventDefault();$('term-out').innerHTML='';termLine('cleared','sys')}
+});
+function renderAgents(agents){
+  $('ag-count-h').textContent=agents.length;$('hpill-ag').textContent=agents.length;
+  if(!agents.length){$('agents-list').innerHTML='<div class="no-data">No agents loaded</div>';return}
+  $('agents-list').innerHTML=agents.map(a=>`<div class="agent-row"><div class="arow"><div><div class="an">${esc(a.name)}</div><div class="am">${esc(a.provider)} / ${esc(a.model)}</div><div class="ab"><span class="badge ${a.status}">${a.status}</span><span class="badge">${a.type}</span></div></div><div class="as"><div class="trust">t ${(a.trust||0).toFixed(2)}</div><div class="acc">ok ${pct(a.accuracy||0)}</div><div class="w">w ${a.weight||1}</div></div></div></div>`).join('');
+}
+function renderVotes(votes){
+  if(!votes.length){$('votes-list').innerHTML='<div class="no-data">Waiting for votes...</div>';return}
+  $('votes-list').innerHTML=votes.map(v=>`<div class="vote-row"><span class="vn">${esc(v.agent_name||'')}</span><span class="va ${v.action||''}">${v.action||''}</span><span class="vc">${pct(v.confidence||0)}</span><span class="vr">${esc((v.reasoning||'').substring(0,80))}</span><span class="vl">${v.latency_ms?v.latency_ms+'ms':''}</span></div>`).join('');
+}
+function renderConsensus(d){
+  const ctx=d.context||{};
+  $('cb-sym').textContent=(ctx.token_symbol||'-')+(ctx.token_address?' · '+ctx.token_address.slice(0,10)+'...':'');
+  $('cb-price').textContent=ctx.price_usd?'$'+fmt(ctx.price_usd):'';
+  const votes=d.votes||[];const valid=votes.filter(v=>(v.confidence||0)>0);const n=valid.length||1;
+  const b=valid.filter(v=>v.action==='BUY').length;const s=valid.filter(v=>v.action==='SELL').length;const h=valid.filter(v=>v.action==='HOLD').length;
+  $('bar-buy').style.width=(b/n*100)+'%';$('bar-sell').style.width=(s/n*100)+'%';$('bar-hold').style.width=(h/n*100)+'%';
+  $('bar-b-pct').textContent=Math.round(b/n*100)+'% B';$('bar-s-pct').textContent=Math.round(s/n*100)+'% S';$('bar-h-pct').textContent=Math.round(h/n*100)+'% H';
+  const vt=$('verdict-tag');const action=d.action||d.verdict||'';const veto=d.veto||d.veto_reason||'';
+  if(veto){vt.style.display='';vt.className='verdict-tag VETO';vt.textContent='VETO';$('veto-txt').style.display='';$('veto-txt').textContent=veto.slice(0,60)}
+  else if(action){vt.style.display='';vt.className='verdict-tag '+action;vt.textContent=(d.approved?'OK ':'')+action;$('veto-txt').style.display='none'}
+  else{vt.style.display='none';$('veto-txt').style.display='none'}
+  $('s-qrm').textContent=(d.quorum||valid.length)+'/'+votes.length;$('s-conf').textContent=d.confidence?pct(d.confidence):'-';
+}
+function renderCtx(ctx){
+  if(!ctx||!ctx.token_symbol){$('ctx-strip').innerHTML='<span>No active context</span>';return}
+  const chg=ctx.price_change_1h||0;const chgCol=chg>=0?'var(--green)':'var(--red)';
+  $('ctx-strip').innerHTML=`<b>${esc(ctx.token_symbol)}</b><span>mcap <b>$${Number(ctx.market_cap||0).toLocaleString()}</b></span><span>vol24 <b>$${Number(ctx.volume_24h||0).toLocaleString()}</b></span><span>liq <b>${Number(ctx.liquidity_sol||0).toFixed(1)} SOL</b></span><span>holders <b>${Number(ctx.holder_count||0).toLocaleString()}</b></span><span>1h <b style="color:${chgCol}">${chg>=0?'+':''}${Number(chg).toFixed(1)}%</b></span>${ctx.is_new_launch?'<span class="new-launch">NEW LAUNCH</span>':''}`;
+}
+function renderPositions(positions){
+  $('pos-count-h').textContent=positions.length;$('hpill-pos').textContent=positions.length;
+  const exp=positions.reduce((a,p)=>a+(p.size_sol||0)*(p.remaining||1),0);$('s-exp').textContent=exp.toFixed(3)+' SOL';
+  if(!positions.length){$('pos-list').innerHTML='<div class="no-data">No open positions</div>';return}
+  $('pos-list').innerHTML=positions.map(p=>{const pnl=(p.unrealized_pnl_sol||p.pnl||0);const pnlCls=pnl>=0?'pos':'neg';const sign=pnl>=0?'+':'';return`<div class="pos-row"><span class="ps">${esc(p.symbol||p.token_symbol||'?')}</span><span class="pe">$${fmt(p.entry_usd||p.entry_price_usd||0)}</span><span class="psz">${(p.size_sol||0).toFixed(4)}</span><span class="pst">${pct(p.stop_pct||0.15)}</span><span class="ppnl ${pnlCls}">${sign}${pnl.toFixed(4)}</span><span class="pag">${age(p.opened_at)}</span></div>`}).join('');
+}
+function renderMessages(msgs){
+  $('msg-count-h').textContent=msgs.length;
+  if(!msgs.length){$('msgs-list').innerHTML='<div class="no-data">No messages</div>';return}
+  $('msgs-list').innerHTML=msgs.slice().reverse().map(m=>`<div class="msg-row"><span class="mf ${m.type||''}">${esc(m.from||'')} · ${m.type||''}</span><div class="mb">${esc(m.content||'')}</div><div class="mt">${age(m.ts)} ago</div></div>`).join('');
+}
+function renderPills(d){
+  const pnl=d.session_pnl_sol||0;const loss=d.daily_loss_sol||0;
+  const pnlEl=$('hpill-pnl');pnlEl.textContent=(pnl>=0?'+':'')+pnl.toFixed(3);pnlEl.className='pill-val '+(pnl>=0?'green':'red');
+  const lossEl=$('hpill-loss');lossEl.textContent=loss.toFixed(3);lossEl.className='pill-val '+(loss>1.0?'red':loss>0.5?'yellow':'');
+  $('hpill-mode').textContent=d.dry_run?'DRY':'LIVE';$('hpill-mode').className='pill-val '+(d.dry_run?'':'red');
+  $('s-sess').textContent=(pnl>=0?'+':'')+pnl.toFixed(4)+' SOL';$('s-dloss').textContent=loss.toFixed(4)+' SOL';$('s-trades').textContent=d.total_trades||0;
+  const wr=d.win_rate;$('hpill-wr').textContent=wr!=null?pct(wr):'-';$('hpill-wr').className='pill-val '+(wr>0.5?'green':wr<0.4?'red':'yellow');
+}
+async function poll(){
+  try{
+    const r=await fetch('/api/stats');if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();
+    $('conn-dot').className='ok';$('last-ts').textContent=new Date().toLocaleTimeString();$('err-banner').style.display='none';
+    renderAgents(d.agents||[]);renderPositions(d.positions||[]);renderMessages(d.messages||[]);renderCtx(d.context||{});renderPills(d);
+    if(!S.wsActive)renderVotes(S.votes);
+  }catch(e){$('conn-dot').className='';$('err-banner').style.display='block';$('err-banner').textContent='API unreachable: '+e.message}
+}
+function connectWS(){
+  const id='dash-'+Math.random().toString(36).slice(2,8);const proto=location.protocol==='https:'?'wss':'ws';
+  const ws=new WebSocket(proto+'://'+location.host+'/ws/'+id);
+  ws.onopen=()=>{S.wsActive=true};ws.onclose=()=>{S.wsActive=false;setTimeout(connectWS,3000)};
+  ws.onmessage=e=>{let msg;try{msg=JSON.parse(e.data)}catch{return}
+    if(msg.event==='decision'){const d=msg.decision;S.votes=d.votes||S.votes;S.lastCtx=d.context||{};renderVotes(S.votes);renderConsensus({votes:S.votes,context:S.lastCtx,confidence:d.confidence,action:d.action,approved:d.approved,veto_reason:d.veto_reason,quorum:d.quorum});renderCtx(S.lastCtx);renderPills(d)}
+    if(msg.event==='new_context'){S.votes=[];S.lastCtx=msg.context||{};renderVotes([]);renderCtx(S.lastCtx)}
+  };
+}
+poll();setInterval(poll,3000);connectWS();
+</script></body></html>
