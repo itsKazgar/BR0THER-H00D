@@ -21,6 +21,22 @@ html, body {
 #app { width: 100%; max-width: 620px; padding: 20px; box-sizing: border-box; }
 pre { overflow-x: auto; max-width: 100%; font-size: clamp(7px, 2.8vw, 15px); line-height: 1.5; }
 #menu-input-row { flex-wrap: wrap; }
+/* ASCII BOX REPLACEMENT */
+.box {
+  border: 1px solid #00ffff;
+  padding: 16px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 10px;
+  box-sizing: border-box;
+}
+.box-line { padding: 4px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.box-line.title { color: #00ffff; font-size: clamp(13px, 4vw, 18px); font-weight: bold; letter-spacing: 2px; border-bottom: 1px solid #00ffff; padding-bottom: 10px; margin-bottom: 10px; }
+.box-line.dim { color: #555; font-size: clamp(11px, 3vw, 14px); margin-bottom: 10px; }
+.box-sep { border-top: 1px solid #333; margin: 8px 0; }
+.box-line.gr { color: #00ff88; font-size: clamp(11px, 3.5vw, 15px); padding: 3px 0; }
+.box-line.cy { color: #00ffff; font-size: clamp(11px, 3.5vw, 15px); padding: 3px 0; }
+
 @media (max-width: 480px) {
   #app { padding: 12px 8px; }
   #menu-key { font-size: 16px; }
@@ -61,20 +77,13 @@ pre { white-space: pre; line-height: 1.5; font-size: clamp(7px, 2.8vw, 15px); ov
 
 <!-- ENTRY -->
 <div id="entry">
-<pre class="cy">
-  ╔══════════════════════════════════════════════╗
-  ║  BR0THER-H00D                                ║
-  ╠══════════════════════════════════════════════╣
-  ║                                              ║
-  ║  holders only. verify your $H00D below.      ║
-  ║                                              ║
-  ╠══════════════════════════════════════════════╣
-  ║                                              ║
-  ║  <span class="gr">[1]  Connect Phantom — verify $H00D</span>         ║
-  ║  <span class="cy">[2]  Buy $H00D on pump.fun</span>                  ║
-  ║                                              ║
-  ╚══════════════════════════════════════════════╝
-</pre>
+<div class="box">
+  <div class="box-line title">BR0THER-H00D</div>
+  <div class="box-line dim">holders only. verify your $H00D below.</div>
+  <div class="box-sep"></div>
+  <div class="box-line gr">[1]  Connect Phantom — verify $H00D</div>
+  <div class="box-line cy">[2]  Buy $H00D on pump.fun</div>
+</div>
 
 <div id="menu-input-row">
   <span>  Select (0-2): </span>
