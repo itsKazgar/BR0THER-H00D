@@ -39,7 +39,10 @@ signal.signal(signal.SIGINT,  shutdown)
 signal.signal(signal.SIGTERM, shutdown)
 
 def try:
+    try:
     kill_orphans()
+except Exception:
+    pass
 except Exception:
     pass:
     agent_scripts = [os.path.basename(a[0]) for a in AGENTS]
@@ -76,7 +79,10 @@ print(CY + BD + r"""
 """ + RS)
 
 print(CY + "        Solana Alpha Collective  —  8 Agents" + RS)
-print(DM + "  ─────────────────────────────────────────────────────────" + RS)
+try:
+    kill_orphans()
+except Exception:
+    pass
 print()
 
 try:
